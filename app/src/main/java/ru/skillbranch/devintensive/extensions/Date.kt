@@ -5,7 +5,41 @@ import java.util.*
 import kotlin.math.absoluteValue
 
 enum class TimeUnits {
-    SECOND, MINUTE, HOUR, DAY
+    SECOND, MINUTE, HOUR, DAY;
+    public fun plural(value: Int) : String {
+        return value.toString() + " " +
+                when{
+                    (this == SECOND) -> {
+                        when {
+                            (value != 11) && (value % 10 == 1)  -> "секунду"
+                            value > 4 && ((value in 5..20) || (value % 10 in 5..9) || (value % 10 == 0)) -> "секунд"
+                            else -> "секунды"
+                        }
+                    }
+                    (this == MINUTE) -> {
+                        when {
+                            (value != 11) && (value % 10 == 1)  -> "минуту"
+                            value > 4 && ((value in 5..20) || (value % 10 in 5..9) || (value % 10 == 0)) -> "минут"
+                            else -> "минуты"
+                        }
+                    }
+                    (this == HOUR) -> {
+                        when {
+                            (value != 11) && (value % 10 == 1)  -> "час"
+                            value > 4 && ((value in 5..20) || (value % 10 in 5..9) || (value % 10 == 0)) -> "часов"
+                            else -> "часа"
+                        }
+                    }
+                    (this == DAY) -> {
+                        when {
+                            (value != 11) && (value % 10 == 1)  -> "день"
+                            value > 4 && ((value in 5..20) || (value % 10 in 5..9) || (value % 10 == 0)) -> "дней"
+                            else -> "дня"
+                        }
+                    }
+                    else -> ""
+                }
+    }
 }
 
 fun Date.format(pattern:String ="HH:mm:ss dd.MM.yy"): String  {
