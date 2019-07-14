@@ -3,7 +3,6 @@ package ru.skillbranch.devintensive
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.text.InputType
 import android.util.Log
 import android.view.View
@@ -45,33 +44,37 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private fun initialize() {
         setContentView(R.layout.activity_main)
-        // benderImage = findViewById(R.id.iv_bender) as ImageView
-
         benderImage = iv_bender
         textTxt = tv_text
         messageEt = et_message
         sendBtn = iv_send
+    }
 
+    private fun loadFromBundle(savedInstanceState: Bundle?) {
         val status = savedInstanceState?.getString("STATUS") ?: Bender.Status.NORMAL.name // после elvis - default-ы
         val question = savedInstanceState?.getString("QUESTION") ?: Bender.Question.NAME.name
         benderObj = Bender(Bender.Status.valueOf(status), Bender.Question.valueOf(question))
 
         val(r, g, b) = benderObj.status.color
         benderImage.setColorFilter(Color.rgb(r, g, b), PorterDuff.Mode.MULTIPLY)
-
         textTxt.text = benderObj.askQuestion()
-        sendBtn.setOnClickListener(this)
 
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initialize()
+        loadFromBundle(savedInstanceState)
+
+        sendBtn.setOnClickListener(this)
         messageEt.setRawInputType(InputType.TYPE_CLASS_TEXT)
         messageEt.setOnEditorActionListener { _, actionId, _ ->
             if(actionId == EditorInfo.IME_ACTION_DONE)
                 sendBtn.performClick()
             false
             }
-
         Log.d("M_MainActivity","onCreate")
     }
 
