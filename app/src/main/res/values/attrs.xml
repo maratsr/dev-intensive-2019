@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- атрибуты для нашего кастомного View -->
+<resources>
+    <declare-styleable name="AspectRatioImageView">
+        <attr name="aspectRatio" format="float"/>
+    </declare-styleable>
+
+    <declare-styleable name="CircleImageView">
+        <attr name="cv_borderWidth" format="integer"/>
+        <attr name="cv_borderColor" format="reference"/>
+    </declare-styleable>
+
+    <!-- эти три цвета будут меняться в темах -->
+    <attr name="colorAccentedSurface" format="reference"/>
+    <attr name="colorDivider" format="reference"/>
+    <attr name="colorIcon" format="reference"/>
+
+</resources>

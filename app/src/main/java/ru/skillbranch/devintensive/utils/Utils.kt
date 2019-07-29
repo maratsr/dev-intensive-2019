@@ -1,6 +1,10 @@
 package ru.skillbranch.devintensive.utils
 
 object Utils {
+    val exlude_list =  listOf("enterprise", "features", "topics", "collections", "trending",
+        "events", "marketplace", "pricing", "nonprofit", "customer-stories", "security", "login", "join")
+    val regexRepoURL = Regex("^(https:/{2}|)(www\\.|)(github\\.com/)([^/]+)$")
+
     public fun parseFullName(fullName: String? ): Pair<String?, String?> {
         val list_ = fullName?.split(" ")
         return Pair(if (list_?.getOrNull(0).isNullOrBlank()) null else list_?.getOrNull(0),
@@ -15,6 +19,18 @@ object Utils {
             else -> firstName.toUpperCase().get(0).toString() + lastName.toUpperCase().get(0).toString()
         }
 
+    }
+
+    public fun validateRepoName(name: String?) : Boolean {
+        if (name.isNullOrBlank())
+            return true
+        val check = regexRepoURL.matches(name)
+        if (check) {
+            val user = name.substringAfterLast("/").toLowerCase()
+            if (user !in exlude_list)
+                return true
+        }
+        return false
     }
 
     public fun transliteration(payload: String?, divider: String=" "): String? {

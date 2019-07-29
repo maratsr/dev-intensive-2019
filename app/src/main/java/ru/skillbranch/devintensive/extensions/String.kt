@@ -16,7 +16,5 @@ fun String.stripHtml() : String {
         .replace("&nbsp;", "")
         .replace("&lsquo;", "")
         .replace("&rsquo;", "")
-        .trim().replace(Regex(" +"), " ");
-
-
+        .trim().replace(Regex(" +"), " ")
 }
