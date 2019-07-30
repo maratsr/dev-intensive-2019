@@ -34,7 +34,6 @@ class ProfileActivity : AppCompatActivity(){
         setContentView(R.layout.activity_profile)
         initViews(savedInstanceState)
         initViewModel()
-        Log.d("M_ProfileAcitivity","onCreate")
     }
 
     private fun initViews(savedInstanceState: Bundle?) {

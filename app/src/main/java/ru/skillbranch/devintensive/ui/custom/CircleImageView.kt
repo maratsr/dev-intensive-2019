@@ -1,6 +1,3 @@
-//https://medium.com/@abdularis/android-custom-view-tutorial-create-circle-image-view-cacdd3e986cb
-//https://www.youtube.com/watch?v=ml4v6vvIqqo
-
 package ru.skillbranch.devintensive.ui.custom
 
 import android.content.Context
@@ -12,8 +9,12 @@ import android.widget.ImageView
 import ru.skillbranch.devintensive.R
 import android.graphics.Bitmap
 import android.net.Uri
-import android.util.Log
 import androidx.annotation.ColorRes
+import androidx.annotation.Dimension
+import androidx.core.content.ContextCompat
+import ru.skillbranch.devintensive.App
+import ru.skillbranch.devintensive.extensions.dpToPx
+import ru.skillbranch.devintensive.extensions.pxToDp
 
 
 class CircleImageView  @JvmOverloads constructor( context: Context, attrs: AttributeSet? = null,
@@ -30,6 +31,7 @@ class CircleImageView  @JvmOverloads constructor( context: Context, attrs: Attri
     private var bitmapBounds = RectF()
     private var borderBounds = RectF()
 
+
     private var shaderMatrix = Matrix()
 
     private var bitmapPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -41,7 +43,7 @@ class CircleImageView  @JvmOverloads constructor( context: Context, attrs: Attri
     init {
         if (attrs != null) {
             val a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView)
-            borderWidth = a.getInt(R.styleable.CircleImageView_cv_borderWidth, BORDER_WIDTH)
+            borderWidth = a.getDimensionPixelSize(R.styleable.CircleImageView_cv_borderWidth, BORDER_WIDTH)
             borderColor = a.getColor(R.styleable.CircleImageView_cv_borderColor, BORDER_COLOR)
             a.recycle() // освободим задействованный ресурс
         }
@@ -54,21 +56,27 @@ class CircleImageView  @JvmOverloads constructor( context: Context, attrs: Attri
         setupBitmap()
     }
 
-    fun getBorderWidth() = borderWidth
+    fun getBorderWidth(): Int = borderWidth.pxToDp()
 
-    fun setBorderWidth(width: Int) {
-        borderWidth = width
+    fun setBorderWidth(@Dimension dp: Int) {
+        borderWidth = dp.dpToPx()
         borderPaint.strokeWidth = borderWidth.toFloat()
         invalidate()
     }
 
-    fun getBorderColor(): Color = borderColor as Color
+    fun getBorderColor(): Int = borderColor
 
     fun setBorderColor(@ColorRes colorId: Int) {
-        borderColor = colorId
+        borderColor = ContextCompat.getColor(App.applicationContext(), colorId)
         borderPaint.color = borderColor
         invalidate()
     }
+    fun setBorderColor(hex:String) {
+        borderColor = Color.parseColor(hex)
+        borderPaint.color = borderColor
+        invalidate()
+    }
+
 
     private fun getBitmapFromDrawable(drawable: Drawable?): Bitmap? {
         if (drawable == null)
@@ -82,8 +90,6 @@ class CircleImageView  @JvmOverloads constructor( context: Context, attrs: Attri
         val canvas = Canvas(bitmap)
 
         drawable.setBounds(0, 0, canvas.width, canvas.height)
-        Log.d("M_Civ_getBitmapFromDr", "canvas" +
-                canvas.width.toString() + ": " + canvas.height.toString() )
         drawable.draw(canvas)
         return bitmap
     }
@@ -118,6 +124,7 @@ class CircleImageView  @JvmOverloads constructor( context: Context, attrs: Attri
             dx = bitmapBounds.left - (cvBitmap!!.width * scale * .5f) + bitmapBounds.width() *.5f
             dy = bitmapBounds.top
         }
+
         shaderMatrix.setScale(scale,scale)
         shaderMatrix.postTranslate(dx, dy)
         cvBitmapShader!!.setLocalMatrix(shaderMatrix)
@@ -152,7 +159,6 @@ class CircleImageView  @JvmOverloads constructor( context: Context, attrs: Attri
         drawStroke(canvas)
     }
 
-    // Блок setter-ов изображений в разных видах, после которых нужно перерисовать его
     override fun setImageResource(resId: Int) {
         super.setImageResource(resId)
         setupBitmap()
@@ -172,6 +178,7 @@ class CircleImageView  @JvmOverloads constructor( context: Context, attrs: Attri
         super.setImageURI(uri)
         setupBitmap()
     }
+
 
     private fun drawBitmap(canvas: Canvas?) {
         canvas!!.drawOval(bitmapBounds, bitmapPaint)
