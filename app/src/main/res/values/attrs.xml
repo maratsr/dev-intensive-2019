@@ -10,9 +10,17 @@
         <attr name="cv_borderColor" format="reference"/>
     </declare-styleable>
 
+    <declare-styleable name="AvatarImageView">
+        <attr name="aiv_borderWidth" format="dimension"/>
+        <attr name="aiv_borderColor" format="color"/>
+    </declare-styleable>
+
     <!-- эти три цвета будут меняться в темах -->
     <attr name="colorAccentedSurface" format="reference"/>
     <attr name="colorDivider" format="reference"/>
     <attr name="colorIcon" format="reference"/>
+
+    <attr name="colorSnackbarBackground" format="reference"/>
+    <attr name="colorSnackbarTextColor" format="reference"/>
 
 </resources>
