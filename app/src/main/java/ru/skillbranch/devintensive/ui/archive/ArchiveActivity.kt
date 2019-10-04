@@ -41,7 +41,7 @@ class ArchiveActivity : AppCompatActivity() {
 
     private fun initViews() {
         chatAdapter = ChatAdapter {
-            val snackbar = Snackbar.make(rv_list, "Click on ${it.title}", Snackbar.LENGTH_LONG)
+            val snackbar = Snackbar.make(rv_archive_list, "Click on ${it.title}", Snackbar.LENGTH_LONG)
             with(snackbar.view) {
                 setBackgroundColor(R.attr.colorSnackbarBackground.resolveColor(this.context))
                 val textView = findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
@@ -55,7 +55,7 @@ class ArchiveActivity : AppCompatActivity() {
             viewModel.restoreFromArchive(item.id)
             val snackbar =
                 Snackbar.make(
-                    rv_list,
+                    rv_archive_list,
                     "Вы точно хотите восстановить ${item.title} из архива?",
                     Snackbar.LENGTH_LONG
                 )
@@ -69,9 +69,9 @@ class ArchiveActivity : AppCompatActivity() {
         }
 
         val touchHelper = ItemTouchHelper(touchCallback)
-        touchHelper.attachToRecyclerView(rv_list)
+        touchHelper.attachToRecyclerView(rv_archive_list)
 
-        with(rv_list) {
+        with(rv_archive_list) {
             adapter = chatAdapter
             layoutManager = LinearLayoutManager(this@ArchiveActivity)
             addItemDecoration(divider)
